@@ -1,0 +1,84 @@
+// prisma/schema.prisma
+// Run: npx prisma db push  (to sync with your Supabase database)
+// Run: npx prisma generate (to regenerate the client after schema changes)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  clerkUserId String
+  name        String
+  date        DateTime?
+  venue       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  guests      Guest[]
+  tables      Table[]
+
+  @@index([clerkUserId])
+}
+
+model Guest {
+  id        String     @id @default(cuid())
+  eventId   String
+  name      String
+  group     String     @default("Other")
+  meal      String     @default("Standard")
+  rsvp      RsvpStatus @default(PENDING)
+  notes     String?
+  plusOne   Boolean    @default(false)
+  email     String?
+  phone     String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  event       Event        @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  assignment  Assignment?
+
+  @@index([eventId])
+}
+
+model Table {
+  id        String   @id @default(cuid())
+  eventId   String
+  name      String
+  seats     Int      @default(8)
+  color     String   @default("#B5D4F4")
+  posX      Float    @default(100)
+  posY      Float    @default(100)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  event       Event        @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  assignments Assignment[]
+
+  @@index([eventId])
+}
+
+model Assignment {
+  id        String   @id @default(cuid())
+  guestId   String   @unique
+  tableId   String
+  createdAt DateTime @default(now())
+
+  guest Guest @relation(fields: [guestId], references: [id], onDelete: Cascade)
+  table Table @relation(fields: [tableId], references: [id], onDelete: Cascade)
+
+  @@index([tableId])
+}
+
+enum RsvpStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  MAYBE
+}
