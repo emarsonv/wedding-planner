@@ -1,8 +1,8 @@
 {
   "folders": [
     {
-      "path": "."
-    }
+      "path": ".",
+    },
   ],
   "settings": {
     "explorer.fileNesting.enabled": true,
@@ -12,10 +12,11 @@
       "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, .npmrc, .nvmrc",
       "tailwind.config.*": "postcss.config.*",
       "next.config.*": ".env*, .eslintrc*, .prettierrc*",
-      "prisma": "*.prisma"
+      "prisma": "*.prisma",
     },
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "prisma.pinToPrisma6": true,
   },
   "extensions": {
     "recommendations": [
@@ -24,8 +25,8 @@
       "bradlc.vscode-tailwindcss",
       "prisma.prisma",
       "ms-vscode.vscode-typescript-next",
-      "eamodio.gitlens"
-    ]
+      "eamodio.gitlens",
+    ],
   },
   "launch": {
     "version": "0.2.0",
@@ -34,8 +35,8 @@
         "name": "Start dev server",
         "type": "node-terminal",
         "request": "launch",
-        "command": "npm run dev"
-      }
-    ]
-  }
+        "command": "npm run dev",
+      },
+    ],
+  },
 }
